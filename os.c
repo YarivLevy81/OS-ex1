@@ -49,9 +49,15 @@ void* phys_to_virt(uint64_t phys_addr)
 
 int main(int argc, char **argv)
 {
-	uint64_t pt = alloc_page_frame();
+	setvbuf (stdout, NULL, _IONBF, 0);
 
-	assert(page_table_query(pt, 0xcafe) == NO_MAPPING);
+    
+    uint64_t pt = alloc_page_frame();
+    
+	
+    assert(page_table_query(pt, 0xcafe) == NO_MAPPING);
+    printf("1\n");
+    return 1;
 	page_table_update(pt, 0xcafe, 0xf00d);
 	assert(page_table_query(pt, 0xcafe) == 0xf00d);
 	page_table_update(pt, 0xcafe, NO_MAPPING);
