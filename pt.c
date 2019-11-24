@@ -18,7 +18,7 @@ void page_table_update(uint64_t pt, uint64_t vpn, uint64_t ppn)
     
     unsigned short vpns[5] = {vpn1, vpn2, vpn3, vpn4, vpn5};
     
-    uint64_t *level_k = (uint64_t *)(phys_to_virt(pt));
+    uint64_t *level_k = (uint64_t *)(phys_to_virt(pt << 12));
     uint64_t current;
 
     for (int i = 0; i < 4; i++) {
@@ -30,10 +30,10 @@ void page_table_update(uint64_t pt, uint64_t vpn, uint64_t ppn)
             next = next << 12;
             next = next | 1;
             level_k[vpns[i]] = next; 
-            level_k = (uint64_t*)(phys_to_virt(next));
+            level_k = (uint64_t*)(phys_to_virt(next)-1);
         
         } else {
-            level_k = (uint64_t*)(phys_to_virt(current));
+            level_k = (uint64_t*)(phys_to_virt(current)-1);
 
         }
     
@@ -57,7 +57,7 @@ uint64_t page_table_query(uint64_t pt, uint64_t vpn)
     vpn_to_vpn5(vpn, &vpn1, &vpn2, &vpn3, &vpn4, &vpn5, &offset);
     
     unsigned short vpns[5] = {vpn1, vpn2, vpn3, vpn4, vpn5};
-    uint64_t *level_k = (uint64_t *)(phys_to_virt(pt));
+    uint64_t *level_k = (uint64_t *)(phys_to_virt(pt << 12 ));
     uint64_t current;
 
     for (int i = 0; i < 4; i++) {
@@ -67,7 +67,7 @@ uint64_t page_table_query(uint64_t pt, uint64_t vpn)
             return NO_MAPPING; 
         }
 
-        level_k  = (uint64_t *)(phys_to_virt(current));
+        level_k  = (uint64_t *)(phys_to_virt(current)-1);
     }
     
     if ((level_k[vpns[4]] & 1) == 0){

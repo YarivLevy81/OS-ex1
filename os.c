@@ -180,11 +180,9 @@ void perform_random_move(uint64_t pt) {
 
 	switch (option) {
 		case 0:
-            printf("random and check\n");
 			update_random_and_check(pt);
 			break;
 		case 1:
-            printf("many with prefix\n");
 			update_many_with_prefix(pt);
 			break;
 	}
